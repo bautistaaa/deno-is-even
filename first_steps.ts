@@ -5,7 +5,7 @@ const isEven = (n: number): boolean => n % 2 === 0;
 const handler = async (req: Request): Promise<Response> => {
   const x = new URLSearchParams(req.url);
   const input = x.get("input");
-  const test = isEven(input as unknown as number) ? "even" : "odd";
+  const test = isEven(Number(input)) ? "even" : "odd";
 
   return new Response(test, {
     status: 200,
