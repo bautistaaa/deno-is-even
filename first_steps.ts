@@ -1,17 +1,22 @@
-import isEven from "npm:is-even";
+import { serve } from 'https://deno.land/std@0.190.0/http/server.ts';
 
-import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
-
-// deno-lint-ignore require-await
 const handler = async (_request: Request): Promise<Response> => {
-  const what = isEven(3);
+	const resp = await fetch('https://api.github.com/users/denoland', {
+		// The init object here has an headers object containing a
+		// header that indicates what type of response we accept.
+		// We're not specifying the method field since by default
+		// fetch makes a GET request.
+		headers: {
+			accept: 'application/json',
+		},
+	});
 
-  return new Response(what, {
-    status: 200,
-    headers: {
-      "content-type": "application/json",
-    },
-  });
+	return new Response(resp.body, {
+		status: resp.status,
+		headers: {
+			'content-type': 'application/json',
+		},
+	});
 };
 
 serve(handler);
